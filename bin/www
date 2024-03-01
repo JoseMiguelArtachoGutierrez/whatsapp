@@ -79,7 +79,10 @@ io.on('connection', (socket) => {
     }else{
       socket.emit("token",{
         "error":1,
-        "mensaje":"Los datos no son correctos"
+        "mensaje":"Los datos no son correctos",
+        "name":funcionesGlobales.stringValida(msg.name),
+        "estado":funcionesGlobales.stringValida(msg.estado),
+        "foto":funcionesGlobales.stringValida(msg.fotoDePerfil)
       })
     }
     socket.emit('usuarioActual',msg)
