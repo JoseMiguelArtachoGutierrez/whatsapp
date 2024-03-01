@@ -68,7 +68,7 @@ const AppWithLocalStorageCheck = () => {
         <Route path="/" element={<App />} />
         <Route path="/chat" element={<App />} />
         {/* Ruta por defecto: se redirige a esta ruta si usuarioRegistrado no existe en localStorage */}
-        <Route path="/registro" element={<Navigate to="/registro" />} />
+        <Route path="/*" element={<Navigate to="/registro" />} />
       </Routes>
     </RouterProvider>
   );
