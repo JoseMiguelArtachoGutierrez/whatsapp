@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
     console.log("nombre:",funcionesGlobales.stringValida(msg.name))
     console.log("estado:",funcionesGlobales.stringValida(msg.estado))
     console.log("foto:",funcionesGlobales.stringValida(msg.fotoDePerfil))
-    if (funcionesGlobales.stringValida(msg.name) && funcionesGlobales.stringValida(msg.estado) && funcionesGlobales.stringValida(msg.fotoDePerfil)) {
+    if (funcionesGlobales.stringValida(msg.name) && funcionesGlobales.stringValida(msg.estado) && msg.fotoDePerfil) {
       let token = funcionesGlobales.crearToken(msg.name,msg.estado,msg.fotoDePerfil)
       msg.token=token
       socket.nombre=msg.name;
@@ -82,7 +82,7 @@ io.on('connection', (socket) => {
         "mensaje":"Los datos no son correctos",
         "name":funcionesGlobales.stringValida(msg.name),
         "estado":funcionesGlobales.stringValida(msg.estado),
-        "foto":funcionesGlobales.stringValida(msg.fotoDePerfil)
+        "foto":msg.fotoDePerfil
       })
     }
     socket.emit('usuarioActual',msg)
