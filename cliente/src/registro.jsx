@@ -42,7 +42,7 @@ function Registro() {
             }else{
                 localStorage.setItem('usuarioRegistrado', msg); // Guarda el token en el localStorage
                 setTokenReceived(true); // Marca que el token ha sido recibido
-                navigate('/');
+                navigate('/registro');
             }
         }
     });

@@ -13,7 +13,7 @@ function Navegacion() {
         let token=localStorage.getItem('usuarioRegistrado')
         socket.emit("cerrarSesion",token);
         localStorage.removeItem('usuarioRegistrado');
-        navigate('/registro');
+        navigate('/');
     }
     socket.on('usuariosActivos', (usuarios) => {
         setUsuariosActivos(usuarios);
