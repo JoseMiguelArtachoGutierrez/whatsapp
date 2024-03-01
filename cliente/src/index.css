@@ -1,0 +1,256 @@
+*{
+  margin: 0 ;
+  padding: 0 ;
+  box-sizing: border-box ;
+}
+.total{
+  min-height: 100vh  !important;
+  width: 100% ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body{
+  background-color: #202c33;
+  color: white;
+}
+h1{
+  margin: 0 !important;
+  padding: 0 !important;
+}
+ul{
+  margin: 0 !important;
+}
+.inicio{
+  display: flex;
+  height: 100% ;
+  min-height: 100vh !important;
+  width: 100%;
+  background-color: #202c33;
+}
+.btn{
+  padding: 1rem !important;
+}
+
+/* APP */
+.chatGlobal{
+  border-left: 1rem solid #0f5032 ;
+  height: 100%;
+  min-height: 100vh;
+  background-color: #202c33 !important;
+  width: 70%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+li{
+  list-style: none;
+  height: 3rem;
+}
+.chatGlobal>h1{
+  height: 10%;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+.chat{
+  height: 90%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.listaChat{
+  height: 90%;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+.listaChat>li{
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  background-color: #198754;
+  align-items: center;
+  width: 100%;
+}
+.escribir{
+  height: 10%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+.escribir>input{
+  width: 70%;
+}
+.tuMensaje{
+  background-color: #0f5032 !important;
+}
+.conectado{
+  color: white;
+  background-color: rgb(20, 20, 20) !important;
+  width: 60% !important;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* NAVEGACION */
+.navegacion{
+  min-height: 100vh;
+  width: 30%;
+  height: 100% !important;
+  color:  white;
+  display: flex;
+  flex-direction: column;
+  
+}
+.container__img{
+  width: 20%;
+  height: 70%;
+}
+.container__img>img{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container__texto{
+  width: 80%;
+}
+.container__img__perfil{
+  width: 40%;
+  height: 80%;
+}
+.container__img__perfil>img{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dropdown{
+  height: 20% !important;
+  width: 100%;
+}
+.Perfil{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: #198754;
+  border-radius: 0 !important;
+}
+.dropdown-menu{
+  background-color: #198754;
+  width: 100% !important;
+  padding: 0 !important;
+  border: 1px solid white;
+}
+li>a{
+  width: 100%;
+  height: 100%;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center;
+}
+.dropdown-menu:hover,.dropdown-menu:hover .dropdown-item{
+  background-color: #0f5032 !important;
+  color: white !important;
+  cursor: pointer;
+}
+.dropdown-item{
+  text-align: center;
+  background-color: #198754;
+  color: white;
+}
+
+.contenedor__UsuariosActivos{
+  height: 80%;
+}
+.usuario{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2px solid #0f5032;
+  gap: 1rem;
+}
+.usuario:hover{
+  cursor: pointer;
+  background-color: #2f393f;
+}
+.enlaceChatGlobal{
+  padding: 1rem;
+  background-color: #156e45;
+}
+.enlaceChatGlobal:hover{
+  cursor: pointer;
+  background-color: #13633e;
+}
+/* REGISTRO */
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+button img {
+  width: 50px; 
+  border-radius: 50%; 
+  border: 2px solid transparent;
+}
+button img:hover{
+  transform: scale(1.1);
+}
+
+.selected img {
+  border-color: rgb(9, 88, 42); /* Cambia el color del borde seleccionado */
+}
+.registro{
+
+  width: 50%;
+  padding: 1rem;
+  background-color: #198754;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+.registro>p{
+  font-weight: bold;
+}
+.registro>div{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.fotos{
+  display: flex;
+  align-items: center;
+}
+.registro>button{
+  background-color: #0f5032;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: white;
+}
+.registro>button:hover{
+  transition: 0.5s ease;
+  background-color: white;
+  transform: scale(1.1);
+  color: #0f5032;
+  border: 2px solid #0f5032;
+}

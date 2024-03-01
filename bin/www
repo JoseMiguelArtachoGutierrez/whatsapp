@@ -1,0 +1,230 @@
+#!/usr/bin/env node
+const { Server } = require('socket.io');
+const Funciones = require('./funciones');
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('proyectazo:server');
+var http = require('http');
+const { emit } = require('process');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+const io = new Server({
+  cors: {
+    origin: "http://localhost:5173"
+  }
+});
+
+io.listen(4000);
+
+const funcionesGlobales= new Funciones();
+var numeroDeUsuariosActivos=0;
+var usuariosActivos=[]
+var mensajesGlobales=0
+var chatGlobal=[]
+
+io.on('connection', (socket) => {
+  numeroDeUsuariosActivos++;
+
+  io.emit('usuariosActivos', usuariosActivos);
+  socket.on('disconnect', () => {
+    numeroDeUsuariosActivos--;
+  });
+  socket.on('cerrarSesion',(msg)=>{
+    const index = usuariosActivos.findIndex(objeto => objeto.token === msg)
+    if (index !== -1) {
+      usuariosActivos.splice(index, 1);
+    }
+    io.emit('usuariosActivos', usuariosActivos)
+  })
+  socket.on('registro',(msg)=>{
+
+    if (funcionesGlobales.stringValida(msg.name) && funcionesGlobales.stringValida(msg.estado) && funcionesGlobales.stringValida(msg.fotoDePerfil)) {
+      let token = funcionesGlobales.crearToken(msg.name,msg.estado,msg.fotoDePerfil)
+      msg.token=token
+      socket.nombre=msg.name;
+      let existe=false
+      usuariosActivos.forEach(element => {
+        if (element.name==msg.name) {
+          existe= true
+        }
+      });
+      if (!existe) {
+        socket.emit("token",token);
+        msg.id=socket.id
+        usuariosActivos.push(msg)
+      }else{
+        socket.emit("token",{
+          "error":2,
+          "mensaje":"Ya existe un usuario con esos mismos datos"
+        })
+      }
+    }else{
+      socket.emit("token",{
+        "error":1,
+        "mensaje":"Los datos no son correctos"
+      })
+    }
+    io.emit('usuariosActivos', usuariosActivos)
+  })
+  
+  socket.on("comprobarToken",(msg)=>{
+    let resultadoToken = funcionesGlobales.comprobarToken(msg)
+    let existe=false
+    resultadoToken.id=socket.id
+    let indice=null
+    usuariosActivos.forEach((element,index) => {
+      if (element.name==resultadoToken.name) {
+        existe= true
+        indice=index
+      }
+    });
+    socket.nombre=resultadoToken.name
+    
+    if (resultadoToken && !existe) {
+      usuariosActivos.push(resultadoToken)
+      datosAEnviar={
+        id:mensajesGlobales++,
+        name:socket.nombre,
+        mensaje: false
+      }
+      chatGlobal.push(datosAEnviar)
+      console.log("Id:",socket.id)
+    }else{
+      usuariosActivos[indice].id=socket.id
+    }
+    
+    io.emit('usuariosActivos', usuariosActivos)
+    socket.emit('usuarioActual',resultadoToken)
+    
+    io.emit('mensajeNuevo', chatGlobal)
+  })
+
+  socket.on('mensajeGlobal',(msg)=>{
+    datosAEnviar={
+      id:mensajesGlobales++,
+      name:socket.nombre,
+      mensaje: msg
+    }
+    chatGlobal.push(datosAEnviar)
+    io.emit('mensajeNuevo',chatGlobal)
+  })
+
+  socket.on('login',(msg)=>{
+    io.emit('mensajeNuevo', chatGlobal)
+    io.emit('usuariosActivos', usuariosActivos)
+    if (msg!="") {
+      usuarioRecibe = usuariosActivos.find(usuario => usuario.name === msg)
+      if (usuarioRecibe) {
+        console.log("privado")
+        io.to(usuarioRecibe.id).emit("recibirChat",false)
+      }
+    }
+  })
+  socket.on('loginPrivado',(msg)=>{
+    
+    usuarioRecibe = usuariosActivos.find(usuario => usuario.name === msg)
+    if (usuarioRecibe) {
+      console.log("privado")
+      io.to(usuarioRecibe.id).emit("recibirChat",false)
+    }
+  })
+  socket.on('mandarChat',(msg)=>{
+
+    usuarioRecibe = usuariosActivos.find(usuario => usuario.name === msg.ID)
+    io.to(usuarioRecibe.id).emit("recibirChat",msg.chat)
+
+    
+  })
+  socket.on("mensajePrivado",(msg)=>{
+    datosAEnviar={
+      id:mensajesGlobales++,
+      de:socket.nombre,
+      mensaje: msg.mensaje,
+      idUsuarioMandar: socket.id
+    }
+    usuarioRecibe = usuariosActivos.find(usuario => usuario.name === msg.ID)
+    io.to(usuarioRecibe.id).emit("recibirMensaje",datosAEnviar)
+  })
+});
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
