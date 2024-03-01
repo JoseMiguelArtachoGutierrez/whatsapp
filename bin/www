@@ -53,7 +53,9 @@ io.on('connection', (socket) => {
     io.emit('usuariosActivos', usuariosActivos)
   })
   socket.on('registro',(msg)=>{
-
+    console.log("nombre:",funcionesGlobales.stringValida(msg.name))
+    console.log("estado:",funcionesGlobales.stringValida(msg.estado))
+    console.log("foto:",funcionesGlobales.stringValida(msg.fotoDePerfil))
     if (funcionesGlobales.stringValida(msg.name) && funcionesGlobales.stringValida(msg.estado) && funcionesGlobales.stringValida(msg.fotoDePerfil)) {
       let token = funcionesGlobales.crearToken(msg.name,msg.estado,msg.fotoDePerfil)
       msg.token=token
