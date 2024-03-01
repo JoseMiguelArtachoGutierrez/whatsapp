@@ -80,6 +80,7 @@ io.on('connection', (socket) => {
         "mensaje":"Los datos no son correctos"
       })
     }
+    socket.emit('usuarioActual',msg)
     io.emit('usuariosActivos', usuariosActivos)
   })
   

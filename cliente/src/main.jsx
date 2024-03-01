@@ -11,7 +11,7 @@ import {
   RouterProvider,
   Routes,
   Route,
-  useNavigate
+  Navigate
 } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -44,8 +44,6 @@ const router = createBrowserRouter([
 ]);
 
 const AppWithLocalStorageCheck = () => {
-  const navigate = useNavigate();
-
   useEffect(() => {
     // Si ya está en "/registro", no se necesita verificar el localStorage
     if (window.location.pathname === '/registro') return;
@@ -54,12 +52,11 @@ const AppWithLocalStorageCheck = () => {
     const usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
     // Si usuarioRegistrado no existe, redirigir al usuario a "/registro"
     if (!usuarioRegistrado) {
-      // Utilizar useNavigate para redirigir
-      navigate('/registro');
-    } else {
-      socket.emit("comprobarToken", usuarioRegistrado);
+      window.location.href = '/registro';
+    }else{
+      socket.emit("comprobarToken",usuarioRegistrado)
     }
-  }, [navigate]); // Ejecutar solo una vez al cargar el componente
+  }, []); // Ejecutar solo una vez al cargar el componente
 
   return (
     <RouterProvider router={router}>
@@ -68,7 +65,7 @@ const AppWithLocalStorageCheck = () => {
         <Route path="/" element={<App />} />
         <Route path="/chat" element={<App />} />
         {/* Ruta por defecto: se redirige a esta ruta si usuarioRegistrado no existe en localStorage */}
-        <Route path="/*" element={<Navigate to="/registro" />} />
+        <Route path="*" element={<Navigate to="/registro" />} />
       </Routes>
     </RouterProvider>
   );
