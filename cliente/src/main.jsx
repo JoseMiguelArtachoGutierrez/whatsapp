@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { socket } from './socket';
+import { useNavigate } from 'react-router-dom';
 import App from './App.jsx';
 import Registro from './registro.jsx';
 import Navegacion from './Navegacion.jsx';
@@ -52,9 +53,10 @@ const AppWithLocalStorageCheck = () => {
     const usuarioRegistrado = localStorage.getItem('usuarioRegistrado');
     // Si usuarioRegistrado no existe, redirigir al usuario a "/registro"
     if (!usuarioRegistrado) {
-      window.location.href = '/registro';
-    }else{
-      socket.emit("comprobarToken",usuarioRegistrado)
+      // Utilizar Navigate para redirigir
+      return <Navigate to="/registro" />;
+    } else {
+      socket.emit("comprobarToken", usuarioRegistrado);
     }
   }, []); // Ejecutar solo una vez al cargar el componente
 
